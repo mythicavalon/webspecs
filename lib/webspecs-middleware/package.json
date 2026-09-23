@@ -1,0 +1,36 @@
+{
+  "name": "@workspace/webspecs-middleware",
+  "version": "0.1.0",
+  "description": "Express middleware that records privacy-preserving WebSpecs request events",
+  "license": "Apache-2.0",
+  "private": false,
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@workspace/webspecs-classifier": "workspace:*"
+  },
+  "peerDependencies": {
+    "express": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "catalog:",
+    "express": "^5.2.1",
+    "typescript": "~5.9.3"
+  }
+}

@@ -1,0 +1,1 @@
+- [Node ESM JSON imports](node-esm-json-imports.md) — emitted Node 24 ESM packages need import attributes for checked-in JSON data.

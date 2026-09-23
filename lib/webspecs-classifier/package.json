@@ -1,0 +1,31 @@
+{
+  "name": "@workspace/webspecs-classifier",
+  "version": "0.1.0",
+  "description": "Auditable, local-only visitor classification for WebSpecs",
+  "license": "Apache-2.0",
+  "private": false,
+  "type": "module",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./signatures": "./dist/data/bot-signatures.json",
+    "./ranges": "./dist/data/datacenter-ranges.json"
+  },
+  "files": [
+    "data",
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "~5.9.3"
+  }
+}

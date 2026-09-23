@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: webspecs
+      POSTGRES_USER: webspecs
+      POSTGRES_PASSWORD: webspecs
+    volumes:
+      - webspecs-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webspecs -d webspecs"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  webspecs:
+    build: .
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://webspecs:webspecs@postgres:5432/webspecs}
+      WEBSPECS_HASH_SALT: ${WEBSPECS_HASH_SALT:?Set WEBSPECS_HASH_SALT in .env}
+      PORT: 5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  webspecs-postgres:

@@ -1,0 +1,16 @@
+{
+  "name": "@workspace/webspecs-snippet",
+  "version": "0.1.0",
+  "description": "Framework-free WebSpecs browser signal snippet",
+  "license": "Apache-2.0",
+  "private": false,
+  "type": "module",
+  "exports": {
+    ".": "./src/snippet.js"
+  },
+  "files": [
+    "src",
+    "LICENSE",
+    "README.md"
+  ]
+}
