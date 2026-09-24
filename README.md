@@ -10,7 +10,7 @@ WebSpecs service.
 
 ## Current scaffold
 
-This first slice establishes the reusable contracts before the dashboard:
+The first build includes the reusable request contracts and a local dashboard:
 
 - `@workspace/webspecs-classifier` — dependency-free, importable classification
   engine with local, versioned JSON signature and datacenter range files.
@@ -21,9 +21,15 @@ This first slice establishes the reusable contracts before the dashboard:
   cookies and no third-party requests.
 - `@workspace/db` — PostgreSQL and SQLite-compatible `webspecs_events` and
   `webspecs_rollups` schemas.
+- `/api/dashboard` — a same-instance HTML dashboard with a locally served
+  Chart.js runtime and hourly category counts.
 
-The local dashboard and persistence adapters are intentionally the next phase;
-the middleware and classifier can already be adopted independently.
+The local dashboard is served by the same instance at `/api/dashboard`. It
+reads only the adopter's `webspecs_rollups` table and serves its Chart.js
+runtime locally, so the page makes no hosted or third-party requests. The
+dashboard shows hourly request counts for human traffic, training crawlers,
+agent fetches, unidentified bots, and suspicious/spoofed traffic. Persistence
+adapters can still be adopted independently.
 
 ## Classification logic
 
@@ -85,6 +91,31 @@ page as `<meta name="webspecs-request-id" content="...">`, then include:
 The snippet must be served by the adopter's own instance. It is not a CDN
 dependency.
 
+## One-click / one-tap website integration
+
+Open the local dashboard at `/api/dashboard`. The **Add WebSpecs to your site**
+panel has copy buttons for both integration steps and a **Copy all setup**
+button that works with a mouse click or a touch tap:
+
+1. Copy the server middleware into the Express app that receives the site's
+   requests.
+2. Copy the browser tag into the page template. The tag is served by the same
+   WebSpecs instance at `/api/snippet.js`; it does not contact a third-party
+   domain.
+3. Render `res.locals.webSpecsRequestId` into the
+   `webspecs-request-id` meta tag so the browser signal is correlated with the
+   server request.
+
+The local instance also exposes the snippet directly:
+
+```sh
+curl http://localhost:5000/api/snippet.js
+```
+
+If the adopter reverse-proxies WebSpecs under another same-origin path, use
+that path in the copied script tag. The dashboard generates the path from the
+route where it is mounted.
+
 ## Self-host with Docker Compose
 
 The compose file provides a local PostgreSQL service and the API service:
@@ -96,6 +127,14 @@ docker compose up --build
 
 For a small site, use the SQLite schema instead of PostgreSQL and point the
 storage adapter at a local file. No hosted dashboard account is required.
+
+## View the local dashboard
+
+After the instance has persisted hourly rollups, open
+`http://localhost:5000/api/dashboard` (or the equivalent path where the
+instance is mounted). Choose a time range to see stacked hourly request
+counts. The page fills missing hours with zeroes and shows an empty state
+until rollups exist.
 
 ## Optional signature updates
 
